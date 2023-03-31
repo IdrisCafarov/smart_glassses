@@ -1,0 +1,368 @@
+
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block body %}
+
+		<!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+			<div class="container-fluid">
+				{% comment %} <div class="text-end mb-3">
+					<a href="javascript:void(0);" class="btn btn-primary btn-rounded add-appointment">+ Book Appointment</a>
+					<a href="doctor-list.html" class="btn btn-primary btn-rounded">Doctor Schedule</a>
+				</div> {% endcomment %}
+				<div class="row">
+					<div class="col-xl-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="table-responsive">
+									<table id="example5" class="table table-striped patient-list mb-4 dataTablesCard fs-14">
+										<thead>
+											<tr>
+												<th>
+													<div class="checkbox text-end align-self-center">
+														<div class="form-check custom-checkbox ">
+															<input type="checkbox" class="form-check-input" id="checkAll" required="">
+															<label class="form-check-label" for="checkAll"></label>
+														</div>
+													</div>
+												</th>
+												<th>Name</th>
+												<th>Email</th>
+												<th>Date Of Appointment</th>
+												<th>From</th>
+												{% comment %} <th>To</th> {% endcomment %}
+												{% comment %} <th>Mobile</th> {% endcomment %}
+												<th>Location Link</th>
+												<th>Injury/Condition</th>
+												{% comment %} <th>Action</th> {% endcomment %}
+											</tr>
+										</thead>
+										<tbody>
+											{% for help in helps %}
+											<tr>
+												<td>
+													<div class="checkbox text-end align-self-center">
+														<div class="form-check custom-checkbox ">
+															<input type="checkbox" class="form-check-input" id="customCheckBox1" required="">
+															<label class="form-check-label" for="customCheckBox1"></label>
+														</div>
+													</div>
+												</td>
+
+												<td class="patient-info ps-0">
+													<span>
+														<img src="{{help.user.image.url}}" alt="">
+													</span>
+													<span class="text-nowrap ms-2">{{help.user.first_name}}</span>
+												</td>
+												{% comment %} <a href="www.google.com"> {% endcomment %}
+													<td class="text-primary">
+													<a href="{% url 'user_detail' help.user.slug %}">
+														{{help.user.email}}
+													</a>
+													</td>
+
+												{% comment %} <td class="text-primary">{{help.user.email}}</td> {% endcomment %}
+												<td>{{help.date}}</td>
+												<td>{{help.time}}</td>
+												{% comment %} <td>13:00</td> {% endcomment %}
+												{% comment %} <td class="text-primary">{{help.user.number}}</td> {% endcomment %}
+												<td><a target="_blank" href="{{help.place}}">Click Here</a></td>
+												<td>{{help.condition}}</td>
+												<td>
+													<span class="me-3">
+													{% comment %} <a href="javascript:void(0);" class="edit-appointment"><i class="fa fa-pencil fs-18 " aria-hidden="true"></i></a> {% endcomment %}
+													</span>
+													<span style="width=50px;height=100px;">
+														<a href="{% url 'done' help.id %}">
+															<i class="fa-solid fa-check" style="font-size: 2em;"></i>
+														</a>
+
+													</span>
+												</td>
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>
+			<!-- <div class="modal fade edit-appointment" id="appointment-edit-form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						  <div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Edit Job</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						  </div>
+						  <div class="modal-body">
+							<div class="mb-4">
+								<label  class="form-label">Position</label>
+								<input type="text"  class="form-control" placeholder="Name" aria-label="name">
+							</div>
+							<div class="mb-4">
+								<label class="form-label">Job Type</label>
+								<select id="inputState" class="form-select form-control">
+								  <option selected>Choose...</option>
+								  <option>Part-Time</option>
+								   <option>Full-Time</option>
+									<option>Freelancer</option>
+								</select>
+							</div>
+							<div class="mb-4">
+								<label class="form-label">Description:</label>
+								<textarea class="form-control" aria-label="With textarea"></textarea>
+							</div>
+							<div class="mb-4">
+								<label  class="form-label">Posted Date</label>
+								<div class="input-group">
+									 <div class="input-group-text"><i class="far fa-clock"></i></div>
+									<input size="16" type="text" value="2012-06-15" readonly class="form-control form_datetime">
+								</div>
+							</div>
+							<div class="mb-4">
+								<label  class="form-label">Last Date To Apply</label>
+								<div class="input-group">
+									 <div class="input-group-text"><i class="far fa-clock"></i></div>
+									<input size="16" type="text" value="2012-06-15" readonly class="form-control form_datetime">
+								</div>
+							</div>
+							<div class="mb-4">
+								<label  class="form-label">Close Date</label>
+								<div class="input-group">
+									 <div class="input-group-text"><i class="far fa-clock"></i></div>
+									<input size="16" type="text" value="2012-06-15" readonly class="form-control form_datetime">
+								</div>
+							</div>
+							<div class="mb-4">
+								<span>Status:<label class="radio-inline mx-3"><input type="radio" name="optradio"> Active</label></span>
+								<span><label class="radio-inline me-3"><input type="radio" name="optradio"> In Active</label></span>
+							</div>
+						  <div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary">Save changes</button>
+						  </div>
+						</div>
+					</div>
+				</div>
+			</div>	 -->
+
+			<div class="modal fade" id="appointment-edit-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Edit Appointment</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					</button>
+				  </div>
+				  <div class="modal-body">
+					<form>
+					<div class="row">
+						<div class="col-xl-12">
+							<div class="form-group">
+								<label for="recipient-name" class="col-form-label">Title:</label>
+								<select class="form-control">
+								  <option>Miss</option>
+								   <option>Mr.</option>
+								    <option>Mrs.</option>
+								</select>
+							 </div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Name:</label>
+								 <input type="text" class="form-control" id="" placeholder="Name">
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Last Name:</label>
+								 <input type="text" class="form-control" id="" placeholder="Last Name">
+							</div>
+						</div>
+						<div class="col-xl-12">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Date Of Appointment:</label>
+								<input size="16" type="date" value="13-9-2021" class="form-control">
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">From:</label>
+								<input size="16" type="time" value="12:00" class="form-control">
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">To:</label>
+								<input size="16" type="time" value="12:00" class="form-control">
+							</div>
+						</div>
+						<div class="col-xl-12">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Address :</label>
+								<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Mobile No:</label>
+								 <input type="text" class="form-control" id="" placeholder="Mobile">
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Email Id:</label>
+								 <input type="email" class="form-control" id="" placeholder="Email">
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Consulting Doctor:</label>
+								<select class="form-control">
+								  <option>Dr.HANI B BARADI</option>
+								   <option>Dr.NAJJIA N MAHMOUD</option>
+								    <option>Dr. SANKAR NAIDU ADUSUMILLI</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Injury/Condition:</label>
+								 <input type="text" class="form-control" id="" placeholder="fever">
+							</div>
+						</div>
+						<div class="col-xl-12">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Note:</label>
+								<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+							</div>
+						</div>
+					</div>
+
+
+					</form>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Send message</button>
+				  </div>
+				</div>
+			  </div>
+			</div>
+
+			<div class="modal fade" id="appointment-add-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+				  {% comment %} <div class="modal-header">
+					{% comment %} <h5 class="modal-title" id="exampleModalLabel">Book Appointment</h5> {% endcomment %}
+					{% comment %} <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					</button> {% endcomment %}
+				  </div>
+				  {% comment %} <div class="modal-body">
+					<form>
+					<div class="row">
+						<div class="col-xl-12">
+							<div class="form-group">
+								<label for="recipient-name" class="col-form-label">Title:</label>
+								<select class="form-control">
+								  <option>Miss</option>
+								   <option>Mr.</option>
+								    <option>Mrs.</option>
+								</select>
+							 </div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Name:</label>
+								 <input type="text" class="form-control" id="" placeholder="Name">
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Last Name:</label>
+								 <input type="text" class="form-control" id="" placeholder="Last Name">
+							</div>
+						</div>
+						<div class="col-xl-12">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Date Of Appointment:</label>
+								<input size="16" type="date" value="13-9-2021" class="form-control">
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label class="col-form-label">From:</label>
+								<input size="16" value="12:00" class="form-control datetimepicker2">
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label class="col-form-label">To:</label>
+								<input size="16" type="time" value="12:00" class="form-control">
+							</div>
+						</div>
+						<div class="col-xl-12">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Address :</label>
+								<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Mobile No:</label>
+								 <input type="text" class="form-control" id="" placeholder="Mobile">
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Email Id:</label>
+								 <input type="email" class="form-control" id="" placeholder="Email">
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Consulting Doctor:</label>
+								<select class="form-control">
+								  <option>Dr.HANI B BARADI</option>
+								   <option>Dr.NAJJIA N MAHMOUD</option>
+								    <option>Dr. SANKAR NAIDU ADUSUMILLI</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-xl-6">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Injury/Condition:</label>
+								 <input type="text" class="form-control" id="" placeholder="fever">
+							</div>
+						</div>
+						<div class="col-xl-12">
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">Note:</label>
+								<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+							</div>
+						</div>
+					</div>
+
+
+					</form>
+				  </div> {% endcomment %}
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Send message</button>
+				  </div>
+				</div>
+			  </div>
+			</div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+		{% endblock body %}
