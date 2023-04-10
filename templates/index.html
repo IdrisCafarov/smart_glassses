@@ -17,9 +17,9 @@
 	<meta property="og:description" content="ERES : Hospital Admin Template" />
 	<meta property="og:image" content="social-image.png" />
 	<meta name="format-detection" content="telephone=no">
-    <title>ERES - Bootstrap Admin Dashboard</title>
+    <title>Login</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/faviconn.png' %}">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
 </head>
@@ -48,12 +48,12 @@
                                             {{form.password|as_crispy_field}}
                                         </div>
                                         <div class="form-row d-flex justify-content-between mt-4 mb-2">
-                                            <div class="form-group">
+                                            {% comment %} <div class="form-group">
                                                <div class="form-check custom-checkbox ms-1">
 													<input type="checkbox" class="form-check-input" id="basic_checkbox_1">
 													<label class="form-check-label" for="basic_checkbox_1">Remember my preference</label>
 												</div>
-                                            </div>
+                                            </div> {% endcomment %}
                                             <div class="form-group">
                                                 <a href="page-forgot-password.html">Forgot Password?</a>
                                             </div>
@@ -62,9 +62,9 @@
                                             <button type="submit" class="btn btn-primary btn-block">Sign Me In</button>
                                         </div>
                                     </form>
-                                    <div class="new-account mt-3">
+                                    {% comment %} <div class="new-account mt-3">
                                         <p>Don't have an account? <a class="text-primary" href="page-register.html">Sign up</a></p>
-                                    </div>
+                                    </div> {% endcomment %}
                                 </div>
 							</div>
                         </div>

@@ -9,10 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import UserChangeForm
 from account.models import *
-# from PIL import Image
-# from user.models import *
 
-# get custom user
 User = get_user_model()
 
 
@@ -59,9 +56,29 @@ class UpdateForm(forms.ModelForm):
         'type':'email',
         'class':'form-control',
         'id':'email',
-        'placeholder':'your@example.com'
+        'placeholder':'your@example.com',
+        'readonly':True
         }
     ))
+
+    phone= forms.CharField(max_length=100,widget=forms.NumberInput(attrs={
+        'type':'text',
+        'class':'form-control',
+        'id':'email',
+        'placeholder':'+9941111111',
+        'readonly':True
+        }
+    ))
+
+    adress= forms.CharField(max_length=100,widget=forms.TextInput(attrs={
+        'type':'text',
+        'class':'form-control',
+        'id':'email',
+        'placeholder':'City Street',
+        }
+    ))
+
+
     first_name=forms.CharField(max_length=100,widget=forms.TextInput(attrs={
         'type':'email',
         'class':'form-control',
@@ -78,43 +95,16 @@ class UpdateForm(forms.ModelForm):
         }
     ))
 
-    # adress=forms.CharField(max_length=100,widget=forms.PasswordInput(attrs={
-    #     'type':'text',
-    #     'class':'form-control',
-    #     'id':'adress',
-    #     'placeholder':'Enter your Adress'
-
-    #     }
-    # ))
-
-    # adress_2=forms.CharField(max_length=100,widget=forms.PasswordInput(attrs={
-    #     'type':'text',
-    #     'class':'form-control',
-    #     'id':'adress2',
-    #     'placeholder':'Enter your Adress'
-
-    #     }
-    # ))
-
-    # country=forms.CharField(max_length=100,widget=forms.PasswordInput(attrs={
-    #     'type':'password',
-    #     'class':'form-control',
-    #     'placeholder':'Enter your Password'
-    #     }
-    # ))
-
-    # city=forms.CharField(max_length=100,widget=forms.PasswordInput(attrs={
-    #     'type':'password',
-    #     'class':'form-control',
-    #     'placeholder':'Enter your Password'
-    #     }
-    # ))
-
+    image=forms.FileField(widget=forms.FileInput(attrs={
+        'type':'file',
+        'class':'form-file-input form-control',
+        }
+    ))
 
 
     class Meta:
         model = MyUser
-        fields = ('first_name','last_name','email')
+        fields = ('first_name','last_name','email','image','phone','adress')
 
 
 
@@ -123,3 +113,29 @@ class UpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for key, field in self.fields.items():
             field.label = ""
+
+
+
+class UserDiseaseForm(forms.ModelForm):
+
+    description= forms.CharField(widget=forms.Textarea(attrs={
+        'class':'form-control',
+        'rows':'4',
+        'id':'comment'
+        }
+    ))
+
+    def __init__(self, *args,user, **kwargs):
+        super(UserDiseaseForm, self).__init__(*args, **kwargs)
+        for key, field in self.fields.items():
+            field.label = ""
+
+        existing_user_diseases = UserDisease.objects.filter(user=user)
+        existing_disease_ids = [user_disease.disease.id for user_disease in existing_user_diseases]
+        available_diseases = Disease.objects.exclude(id__in=existing_disease_ids)
+        self.fields['disease'].queryset = Disease.objects.exclude(id__in=existing_disease_ids)
+
+
+    class Meta:
+        model = UserDisease
+        fields = ['disease', 'description']

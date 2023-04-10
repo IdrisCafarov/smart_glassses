@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from .models import *
 from .serializers import *
 from rest_framework.parsers import MultiPartParser,FormParser
+from django.contrib import messages
 
 # Create your views here.
 
@@ -99,7 +100,7 @@ def update_view(request):
 
     usr = get_object_or_404(MyUser, id=request.user.id)
 
-    if request.method == 'POST':
+    if request.method == 'POST' and 'sub_main' in request.POST:
         form = UpdateForm(request.POST, request.FILES or None, instance=usr)
         print("qaqaaaaa")
         if form.is_valid():
@@ -107,15 +108,43 @@ def update_view(request):
             print("qaqam zor")
 
             form.save()
-            # messages.success(request, 'Sizin postunuz uğurla yeniləndi!')
-            return redirect('index')
-        else:
-            context['form'] = form
+            messages.success(request, 'Your informations succesfully updated!')
 
-    context['form'] = UpdateForm(instance=usr)
+            return redirect('edit')
+    else:
+        form = UpdateForm(instance=usr)
+
+    if request.method == 'POST' and 'modal_sub' in request.POST:
+        form_modal = UserDiseaseForm(request.POST, request.FILES or None, user=usr)
+
+        if form_modal.is_valid():
+            disease = form_modal.save(commit=False)
+            disease.user=usr
+            disease.save()
+            print("qaqam zor")
+
+            form_modal.save()
+            messages.success(request, 'You succesfully added an Disease!')
+            return redirect('edit')
+    else:
+        form_modal = UserDiseaseForm(user=usr)
+
+    context['form'] = form
+    context['form_modal'] = form_modal
+    context['user'] = usr
 
 
     return render(request,"edit_user.html",context)
+
+
+def delete_disease(request,id):
+    object = get_object_or_404(UserDisease,id=id)
+    object.delete()
+    messages.success(request, 'You succesfully deleted an Disease!')
+
+    return redirect('edit')
+
+
 
 
 

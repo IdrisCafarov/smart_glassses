@@ -20,6 +20,8 @@ USER_MODEL = settings.AUTH_USER_MODEL
 
 
 
+
+
 class MyUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(_('username'), null=True, max_length=100, unique=False)
     first_name = models.CharField(_('first name'), max_length=255, blank=True, )
@@ -30,13 +32,16 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     adress = models.TextField(null=True, blank=True)
     phone = models.CharField(max_length=100, null=True, blank=True)
 
-    image = models.ImageField(_("image"),null=True,blank=True,upload_to="user_pp")
+    ########### Custom #######################
+
+    created_date = models.DateTimeField(auto_now_add=True,null=True)
+    ##############################################
+
+    image = models.FileField(_("image"),null=True,blank=True,upload_to="user_pp")
 
     video = models.FileField(_("video"),null=True,blank=True,upload_to="user_video")
 
     last_name = models.CharField(_('last name'), max_length=255, blank=True)
-    image=models.ImageField(_('Add Photo'),null=True)
-
     email = models.EmailField(_('email address'), unique=True, max_length=255, blank=False)
 
     slug = models.SlugField(unique=True, editable=False, null=True)
@@ -109,14 +114,19 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
 
 
+
 class Disease(models.Model):
-    name = models.CharField(max_length=50,verbose_name="Choose your Diseases", choices=DISEASES, null=True)
-    description = models.TextField()
-    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name="disease")
-    created_date = models.DateTimeField(auto_now_add=True, null=True)
+    name = models.CharField(max_length=50,verbose_name="Choose your Diseases", null=True)
 
     def __str__(self):
         return str(self.name)
+
+
+class UserDisease(models.Model):
+    disease = models.ForeignKey(Disease,on_delete=models.CASCADE, related_name="user_disease",null=True)
+    description = models.TextField()
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name="user_disease",null=True)
+
 
 
 

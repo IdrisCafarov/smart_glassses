@@ -11,5 +11,6 @@ urlpatterns = [
     path('admin_help/',admin_help_view,name="admin_help"),
     path('done/<id>/',make_done_call,name="done"),
     path('user_detail/<slug>',user_details,name="user_detail"),
-    path('create_call',CreateCallView.as_view({'post':'create'}),name="create_call")
+    path('create_call/',CreateCallView.as_view({'post':'create'}),name="create_call"),
+    path('delete_disease/<id>/',delete_disease, name="delete_disease"),
 ]

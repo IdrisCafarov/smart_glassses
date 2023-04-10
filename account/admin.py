@@ -21,8 +21,15 @@ User = get_user_model()
 #     max_num = 5
 #     extra = 1
 
+######################################################
 
 
+
+admin.site.register(Disease)
+
+
+
+######################################################
 
 @admin.register(User)
 class MyUserAdmin(UserAdmin):
@@ -53,7 +60,66 @@ class MyUserAdmin(UserAdmin):
 
 
 
-admin.site.register(Disease)
+################## User #######################
+
+class DiseaseInline(admin.StackedInline):
+    model = UserDisease
+    max_num = 10
+    extra = 2
+
+
+
+
+class UserUserAdmin(UserAdmin):
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(is_user=True)#HERE it is the flag for differentiating between Client and Partner
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return list()
+        return super(UserUserAdmin, self).get_inline_instances(request, obj)
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    fieldsets = (
+        (None, {'fields': ('first_name', 'last_name', 'email','image')}),
+       # ('Full name', {'fields': ()}),
+        ('Permissions', {'fields': ('is_active',)}),
+    )
+    inlines = [DiseaseInline]
+    list_display = ('email','first_name','last_name','is_active')
+
+
+
+class UserUser(User):
+    class Meta:
+        proxy = True
+        verbose_name = 'User'
+
+
+
+admin.site.register(UserUser, UserUserAdmin)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 admin.site.register(CallHelp)
